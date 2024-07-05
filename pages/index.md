@@ -1,56 +1,37 @@
----
-title: Welcome to Evidence
----
-
-<Details title='How to edit this page'>
-
-  This page can be found in your project at `/pages/index.md`. Make a change to the markdown file and save it to see the change take effect in your browser.
-</Details>
-
-```sql categories
-  select
-      category
-  from needful_things.orders
-  group by category
+```sql first10customers
+select "Customer Id" as customerid,
+"First Name" as firstname,
+"Last Name" as lastname,
+"Phone 1" as phone1,
+"Phone 2" as phone2,
+* exclude ("Customer Id","First Name","Last Name","Phone 2","Phone 1") from customers.customers_10000 
 ```
 
-<Dropdown data={categories} name=category value=category>
-    <DropdownOption value="%" valueLabel="All Categories"/>
-</Dropdown>
+<DataTable data={first10customers}/>
 
-<Dropdown name=year>
-    <DropdownOption value=% valueLabel="All Years"/>
-    <DropdownOption value=2019/>
-    <DropdownOption value=2020/>
-    <DropdownOption value=2021/>
-</Dropdown>
-
-```sql orders_by_category
-  select 
-      date_trunc('month', order_datetime) as month,
-      sum(sales) as sales_usd,
-      category
-  from needful_things.orders
-  where category like '${inputs.category.value}'
-  and date_part('year', order_datetime) like '${inputs.year.value}'
-  group by all
-  order by sales_usd desc
+```sql top10customersbycountry
+select Country, count(*) as numberofcustomers from customers.customers_10000 group by Country
 ```
 
 <BarChart
-    data={orders_by_category}
-    title="Sales by Month, {inputs.category.label}"
-    x=month
-    y=sales_usd
-    series=category
-/>
+  data={top10customersbycountry}
+  x=Country
+  y=numberofcustomers
+  title = "Customers by Country"
+  swapXY=true
+  yGridlines=false
+  />
 
-## What's Next?
-- [Connect your data sources](settings)
-- Edit/add markdown files in the `pages` folder
-- Deploy your project with [Evidence Cloud](https://evidence.dev/cloud)
+<DimensionGrid data={first10customers} />
 
-## Get Support
-- Message us on [Slack](https://slack.evidence.dev/)
-- Read the [Docs](https://docs.evidence.dev/)
-- Open an issue on [Github](https://github.com/evidence-dev/evidence)
+
+
+
+
+
+
+
+
+
+
+  
